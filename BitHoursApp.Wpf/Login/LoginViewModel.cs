@@ -3,7 +3,10 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Windows;
 using System.Windows.Controls;
+using BitHoursApp.Common.Resources;
+using BitHoursApp.Common.Utils;
 using BitHoursApp.MI.WebApi;
 using BitHoursApp.Mvvm;
 using ReactiveUI;
@@ -36,6 +39,20 @@ namespace BitHoursApp.Wpf.ViewModels
             set
             {
                 this.RaiseAndSetIfChanged(ref email, value);
+                ValidateEmail();
+            }
+        }
+
+        private string emailValidationError;
+        public string EmailValidationError
+        {
+            get
+            {
+                return emailValidationError;
+            }
+            private set
+            {
+                this.RaiseAndSetIfChanged(ref emailValidationError, value);
             }
         }
 
@@ -49,9 +66,23 @@ namespace BitHoursApp.Wpf.ViewModels
             set
             {
                 this.RaiseAndSetIfChanged(ref passwordBox, value);
+                ValidatePassword();
             }
         }
 
+        private string passwordValidationError;
+        public string PasswordValidationError
+        {
+            get
+            {
+                return passwordValidationError;
+            }
+            private set
+            {
+                this.RaiseAndSetIfChanged(ref passwordValidationError, value);
+                ResetErrorText();
+            }
+        }
 
         private bool isLogging;
         public bool IsLogging
@@ -65,6 +96,32 @@ namespace BitHoursApp.Wpf.ViewModels
                 this.RaiseAndSetIfChanged(ref isLogging, value);
             }
 
+        }
+
+        private Visibility capsLockWarningVisibility;
+        public Visibility CapsLockWarningVisibility
+        {
+            get
+            {
+                return capsLockWarningVisibility;
+            }
+            set
+            {
+                this.RaiseAndSetIfChanged(ref capsLockWarningVisibility, value);
+            }
+        }
+
+        private string errorText;
+        public string ErrorText
+        {
+            get
+            {
+                return errorText;
+            }
+            set
+            {
+                this.RaiseAndSetIfChanged(ref errorText, value);
+            }
         }
 
         #endregion
@@ -83,12 +140,28 @@ namespace BitHoursApp.Wpf.ViewModels
 
         private async void Login()
         {
+            ResetErrorText();
+
             IsLogging = true;
 
             var response = await BitHoursApi.Instance.LoginAsync(Email, PasswordBox.Password);
 
-            if (response != null && response.Result != null)
-                OnSignedIn(response.Result.data);
+            if (response != null)
+            {
+                if (response.HasError)
+                {
+                    ErrorText = CommonResourceManager.Instance.GetEnumResource(response.ErrorCode);
+
+#if DEBUG
+
+                    if (!String.IsNullOrEmpty(response.Error))
+                        ErrorText += response.Error;
+
+#endif
+                }
+                else if (response.Result != null)
+                    OnSignedIn(response.Result.data);
+            }
 
             IsLogging = false;
         }
@@ -105,10 +178,39 @@ namespace BitHoursApp.Wpf.ViewModels
 
         #endregion
 
+        #region Validation
+
+        private void ValidateEmail()
+        {
+            EmailValidationError = !RegexUtils.IsValidEmail(Email)
+                ? CommonResourceManager.Instance.GetResourceString("Error_EmailBadFormat")
+                : String.Empty;
+
+        }
+
+        private void ValidatePassword()
+        {
+            PasswordValidationError = String.IsNullOrEmpty(PasswordBox.Password)
+                ? CommonResourceManager.Instance.GetResourceString("Error_PasswordEmpty")
+                : String.Empty;
+        }
+
+        #endregion
+
+        private void ResetErrorText()
+        {
+            ErrorText = String.Empty;
+        }
+
+        public void RefreshCapsLockState()
+        {
+            CapsLockWarningVisibility = Console.CapsLock ? Visibility.Visible : Visibility.Hidden;
+        }
+
         protected virtual void InitializeCommands()
         {
             var canLogin = this.WhenAny(x => x.Email, x => x.PasswordBox, x => x.IsLogging,
-                                    (x1, x2, x3) => !String.IsNullOrWhiteSpace(x1.Value) && x2.Value != null &&
+                                    (x1, x2, x3) => RegexUtils.IsValidEmail(x1.Value) && x2.Value != null &&
                                                         !String.IsNullOrWhiteSpace(x2.Value.Password) &&
                                                             !x3.Value);
 

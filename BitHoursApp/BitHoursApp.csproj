@@ -132,6 +132,14 @@
     <None Include="App.config" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\BitHoursApp.Common.Resources\BitHoursApp.Common.Resources.csproj">
+      <Project>{8b37d8ac-0230-47ec-b47c-7706a5ddcdce}</Project>
+      <Name>BitHoursApp.Common.Resources</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\BitHoursApp.Common.Wpf\BitHoursApp.Common.Wpf.csproj">
+      <Project>{d535e81f-2df7-4ed4-89de-e1a0bbaf93c4}</Project>
+      <Name>BitHoursApp.Common.Wpf</Name>
+    </ProjectReference>
     <ProjectReference Include="..\BitHoursApp.Common\BitHoursApp.Common.csproj">
       <Project>{8bbac0ba-ca84-40e6-a6e4-cd7f25ec512e}</Project>
       <Name>BitHoursApp.Common</Name>

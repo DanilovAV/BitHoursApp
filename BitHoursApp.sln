@@ -17,6 +17,10 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BitHoursApp.Themes.Wpf", "B
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BitHoursApp.Controls.Wpf", "BitHoursApp.Controls.Wpf\BitHoursApp.Controls.Wpf.csproj", "{7BC459C3-97D5-49CD-BE91-4F317A95AC2A}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BitHoursApp.Common.Resources", "BitHoursApp.Common.Resources\BitHoursApp.Common.Resources.csproj", "{8B37D8AC-0230-47EC-B47C-7706A5DDCDCE}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BitHoursApp.Common.Wpf", "BitHoursApp.Common.Wpf\BitHoursApp.Common.Wpf.csproj", "{D535E81F-2DF7-4ED4-89DE-E1A0BBAF93C4}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -55,6 +59,14 @@ Global
 		{7BC459C3-97D5-49CD-BE91-4F317A95AC2A}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{7BC459C3-97D5-49CD-BE91-4F317A95AC2A}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{7BC459C3-97D5-49CD-BE91-4F317A95AC2A}.Release|Any CPU.Build.0 = Release|Any CPU
+		{8B37D8AC-0230-47EC-B47C-7706A5DDCDCE}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{8B37D8AC-0230-47EC-B47C-7706A5DDCDCE}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{8B37D8AC-0230-47EC-B47C-7706A5DDCDCE}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{8B37D8AC-0230-47EC-B47C-7706A5DDCDCE}.Release|Any CPU.Build.0 = Release|Any CPU
+		{D535E81F-2DF7-4ED4-89DE-E1A0BBAF93C4}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{D535E81F-2DF7-4ED4-89DE-E1A0BBAF93C4}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{D535E81F-2DF7-4ED4-89DE-E1A0BBAF93C4}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{D535E81F-2DF7-4ED4-89DE-E1A0BBAF93C4}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

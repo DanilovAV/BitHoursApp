@@ -1,0 +1,6 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<ResourceReferences>
+  <ResourceReference AssemblyName="BitHoursApp.Common.Resources" ResourceRegistratorName="BitHoursApp.Common.Resources.ResourceRegistrator" ResourceRegistratorMethodName="Initialization">   
+    <EmbeddedResource Include="..\..\..\BitHoursApp\BitHoursApp.Common.Resources\Common.resx"/>  
+  </ResourceReference>
+</ResourceReferences>

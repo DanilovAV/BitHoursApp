@@ -23,7 +23,7 @@ namespace BitHoursApp.MI.WebApi
         /// </summary>
         /// <returns></returns>
         Task<BitHoursApiResponse<BitHoursContractsObject>> GetContractsAsync(int contractorId);
-      
+
     }
 
     public class BitHoursApi : IBitHoursApi
@@ -71,17 +71,21 @@ namespace BitHoursApp.MI.WebApi
                 httpClient = new HttpClient();
                 var response = await httpClient.PostAsync(requestUri, postContent);
                 var content = await response.Content.ReadAsStringAsync();
-                bitHoursApiResponse.Result = JsonConvert.DeserializeObject<BitHoursApiJsonResponse<BitHoursLoginObject>>(content);            
+                bitHoursApiResponse.Result = JsonConvert.DeserializeObject<BitHoursApiJsonResponse<BitHoursLoginObject>>(content);
+
+                //if couldn't connect 
+                if (!bitHoursApiResponse.Result.success)
+                    bitHoursApiResponse.ErrorCode = BitHoursApiErrors.LoginError;
             }
-            catch(Exception ex)
+            catch (Exception ex)
             {
                 bitHoursApiResponse.ErrorCode = BitHoursApiErrors.LoginError;
 
-                #if DEBUG
+#if DEBUG
 
                 bitHoursApiResponse.Error = ex.Message;
 
-                #endif
+#endif
             }
             finally
             {

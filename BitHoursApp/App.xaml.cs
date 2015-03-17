@@ -8,6 +8,7 @@ using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Forms;
 using System.Windows.Media.Imaging;
+using BitHoursApp.Common.Resources;
 
 namespace BitHoursApp
 {
@@ -28,6 +29,8 @@ namespace BitHoursApp
         {
             try
             {
+                ResourceRegistrator.Initialization();
+
                 Uri iconUri = GetApplicationIconUri();
 
                 MainWindowWpf.Instance.Icon = BitmapFrame.Create(iconUri);

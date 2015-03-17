@@ -41,11 +41,24 @@
   <ItemGroup>
     <Compile Include="Check.cs" />
     <Compile Include="FileToBase64String.cs" />
+    <Compile Include="Linq\IEnumerableExtensions.cs" />
+    <Compile Include="Linq\LambdaComparer.cs" />
+    <Compile Include="Linq\ObjectReferenceEqualityComparerer.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Reflection\PropertyData.cs" />
     <Compile Include="Reflection\PropertyFormatter.cs" />
     <Compile Include="Reflection\ReflectionHelper.cs" />
     <Compile Include="Reflection\TypeExtension.cs" />
+    <Compile Include="Resources\CommonResourceManager.cs" />
+    <Compile Include="Resources\CompositeKeyProvider.cs" />
+    <Compile Include="Resources\CultureManager.cs" />
+    <Compile Include="Resources\FileResourceManager.cs" />
+    <Compile Include="Resources\ILocalizableString.cs" />
+    <Compile Include="Resources\IResourceManager.cs" />
+    <Compile Include="Resources\IResXKeyProvider.cs" />
+    <Compile Include="Resources\LocalizableString.cs" />
+    <Compile Include="Resources\NonLocalizableString.cs" />
+    <Compile Include="Utils\RegexUtils.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

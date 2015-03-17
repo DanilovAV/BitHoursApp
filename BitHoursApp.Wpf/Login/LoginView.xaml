@@ -3,7 +3,10 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
              xmlns:wpf="clr-namespace:BitHoursApp.Controls.Wpf;assembly=BitHoursApp.Controls.Wpf"
-             xmlns:d="http://schemas.microsoft.com/expression/blend/2008">
+             xmlns:presentationOptions="http://schemas.microsoft.com/winfx/2006/xaml/presentation/options" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             KeyDown="LoginWindow_OnKeyDown"          
+             Loaded="LoginWindow_OnLoaded">
     <UserControl.Resources>
 
         <ResourceDictionary>
@@ -14,81 +17,165 @@
 
             <Style x:Key="TextBlockStyle" TargetType="{x:Type TextBlock}" BasedOn="{StaticResource BaseTextBlock}" >
                 <Setter Property="VerticalAlignment" Value="Center" />
+                <Setter Property="FontSize" Value="11" />
             </Style>
 
             <Style x:Key="LoginTextBoxStyle" TargetType="{x:Type TextBox}" BasedOn="{StaticResource TextBoxStyle}">
-                <Setter Property="Width" Value="150" />
                 <Setter Property="VerticalAlignment" Value="Center" />
-                <Setter Property="Margin" Value="5" />
+                <Setter Property="Height" Value="22"/>
+                <Setter Property="FontSize" Value="11"/>
+                <Setter Property="VerticalContentAlignment" Value="Center"/>
+                <Setter Property="Padding" Value="1,1,1,0" />
             </Style>
+
+            <Style x:Key="InputFieldsContainerStyle" TargetType="{x:Type StackPanel}">
+                <Setter Property="Width" Value="200"/>
+            </Style>
+
+            <DrawingBrush x:Key="CapsLockIcon" Stretch="Uniform" presentationOptions:Freeze="True">
+                <DrawingBrush.Drawing>
+                    <DrawingGroup>
+                        <DrawingGroup.Children>
+                            <GeometryDrawing Brush="#FFEFB400" Geometry="F1 M 3.05176e-005,8.00002L 1.00003,9.00002L 10,8.99996L 11,8.00002L 6.00003,1.90735e-005L 5.00003,1.90735e-005L 3.05176e-005,8.00002 Z "/>
+                            <GeometryDrawing Geometry="F1 M 5.04164,1.00002L 6.00003,1.00002L 10,8.00002L 1.00003,7.99996L 5.04164,1.00002 Z ">
+                                <GeometryDrawing.Brush>
+                                    <LinearGradientBrush StartPoint="0.446755,-0.430089" EndPoint="0.446755,1.14134">
+                                        <LinearGradientBrush.GradientStops>
+                                            <GradientStop Color="#CDFFEBA5" Offset="0.227907"/>
+                                            <GradientStop Color="#CDFFF5D2" Offset="0.294807"/>
+                                            <GradientStop Color="#CDFFFFFF" Offset="0.390698"/>
+                                            <GradientStop Color="#CDEAC42C" Offset="0.516279"/>
+                                            <GradientStop Color="#CDFFD763" Offset="1"/>
+                                        </LinearGradientBrush.GradientStops>
+                                    </LinearGradientBrush>
+                                </GeometryDrawing.Brush>
+                            </GeometryDrawing>
+                            <GeometryDrawing Brush="#73FFFFFF" Geometry="F1 M 2.00005,6.99996L 9.00005,6.99996L 9.00005,7.99996L 2.00005,7.99996L 2.00005,6.99996 Z "/>
+                            <GeometryDrawing Geometry="F1 M 5.00005,1.99996L 6.00005,1.99996L 6.00005,5.99996L 5.00005,5.99996L 5.00005,1.99996 Z ">
+                                <GeometryDrawing.Brush>
+                                    <LinearGradientBrush StartPoint="1.02078,1.49736" EndPoint="1.02078,-0.00263977">
+                                        <LinearGradientBrush.GradientStops>
+                                            <GradientStop Color="#D9545454" Offset="0"/>
+                                            <GradientStop Color="#D9181818" Offset="1"/>
+                                        </LinearGradientBrush.GradientStops>
+                                    </LinearGradientBrush>
+                                </GeometryDrawing.Brush>
+                            </GeometryDrawing>
+                            <GeometryDrawing Geometry="F1 M 5.00003,7.00002L 6.00002,7.00002L 6.00002,8.00002L 5.00003,8.00002L 5.00003,7.00002 Z ">
+                                <GeometryDrawing.Brush>
+                                    <LinearGradientBrush StartPoint="-3.0518e-005,-0.000183105" EndPoint="-3.0518e-005,0.999817">
+                                        <LinearGradientBrush.GradientStops>
+                                            <GradientStop Color="#D9545454" Offset="0"/>
+                                            <GradientStop Color="#D9181818" Offset="1"/>
+                                        </LinearGradientBrush.GradientStops>
+                                    </LinearGradientBrush>
+                                </GeometryDrawing.Brush>
+                            </GeometryDrawing>
+                            <GeometryDrawing Geometry="F1 M 0,7.9999L 4,7.9999L 5.00005,8.9999L 6.00003,8.9999L 7.0625,7.9999L 11,7.9999L 11,9.9999L 0,9.9999L 0,7.9999 Z ">
+                                <GeometryDrawing.Brush>
+                                    <LinearGradientBrush StartPoint="-0.000560413,0.556305" EndPoint="0.999438,0.556305">
+                                        <LinearGradientBrush.GradientStops>
+                                            <GradientStop Color="#00898989" Offset="0"/>
+                                            <GradientStop Color="#1A444444" Offset="0.0883721"/>
+                                            <GradientStop Color="#33000000" Offset="0.520927"/>
+                                            <GradientStop Color="#1A5C5C5C" Offset="0.893023"/>
+                                            <GradientStop Color="#00B8B8B8" Offset="1"/>
+                                        </LinearGradientBrush.GradientStops>
+                                    </LinearGradientBrush>
+                                </GeometryDrawing.Brush>
+                            </GeometryDrawing>
+                        </DrawingGroup.Children>
+                    </DrawingGroup>
+                </DrawingBrush.Drawing>
+            </DrawingBrush>
 
         </ResourceDictionary>
 
     </UserControl.Resources>
 
     <wpf:Activity IsActive="{Binding IsLogging}" HorizontalAlignment="Stretch" VerticalAlignment="Stretch">
-        <Grid>
-            <Border Background="{StaticResource FormBackground}">
-                <Grid HorizontalAlignment="Center" VerticalAlignment="Center">
-                    <Grid.RowDefinitions>
-                        <RowDefinition Height="Auto" />
-                        <RowDefinition Height="Auto" />
-                        <RowDefinition Height="Auto" />
-                        <RowDefinition Height="Auto" />
-                    </Grid.RowDefinitions>
+        <Border Background="{StaticResource FormBackground}">
+            <Grid HorizontalAlignment="Center" VerticalAlignment="Center">
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="Auto" />
+                    <RowDefinition Height="Auto" />
+                    <RowDefinition Height="Auto" />
+                    <RowDefinition Height="Auto" />
+                </Grid.RowDefinitions>
 
-                    <Grid.ColumnDefinitions>
-                        <ColumnDefinition Width="Auto" />
-                        <ColumnDefinition Width="Auto" />
-                    </Grid.ColumnDefinitions>
-
-                    <TextBlock 
-                    Grid.Row="0"                            
-                    Grid.Column="0"                        
-                    Style="{StaticResource TextBlockStyle}"
-                    Text="Email:"                                                       
-                    />
-
-                    <TextBox 
-                    Grid.Row="0"                            
-                    Grid.Column="1" 
-                    Style="{StaticResource LoginTextBoxStyle}"
-                    Text="{Binding Email, UpdateSourceTrigger=PropertyChanged}"  
-                    />
-
-                    <TextBlock 
-                    Grid.Row="1"                            
-                    Grid.Column="0"    
-                    Style="{StaticResource TextBlockStyle}"
-                    Text="Password:"                                                       
-                    />
-
-                    <PasswordBox 
-                    x:Name="pbPassword"
-                    Style="{StaticResource PasswordBoxStyle}" 
-                    PasswordChanged="OnPasswordChanged"
-                    Grid.Row="1"                            
-                    Grid.Column="1" 
-                    Width="150"
-                    Margin="5"
-                    VerticalAlignment="Center"                  
-                    />
-
-                    <StackPanel Grid.Row="2" Grid.ColumnSpan="2" Orientation="Horizontal" HorizontalAlignment="Right">
-
-                        <Button 
-                        Margin="5"                        
-                        Content="Sign In"
-                        Style="{StaticResource ButtonStyle}"
-                        Command="{Binding LoginCommand}"
-                        CommandParameter="{Binding ElementName=pbPassword}"
-                        Width="50"
+                <StackPanel Orientation="Vertical" Grid.Row="0" Style="{StaticResource InputFieldsContainerStyle}">
+                    <TextBlock                                                                               
+                        Style="{StaticResource TextBlockStyle}"
+                        Text="{ResX Key=Common_Email}"                                                       
                         />
 
-                    </StackPanel>
+                    <TextBox                                                        
+                        Style="{StaticResource LoginTextBoxStyle}"                            
+                        Text="{Binding Email, UpdateSourceTrigger=PropertyChanged}"                              
+                        />
 
-                </Grid>
-            </Border>
-        </Grid>
+                    <TextBlock
+                        Foreground="Red"                        
+                        Style="{StaticResource TextBlockStyle}"                        
+                        Text="{Binding EmailValidationError}"                                                                                   
+                        />
+
+                </StackPanel>
+
+                <StackPanel Orientation="Vertical" Grid.Row="1" Style="{StaticResource InputFieldsContainerStyle}">
+
+                    <TextBlock                     
+                        Style="{StaticResource TextBlockStyle}"
+                        Text="{ResX Key=Common_Password}"                                                       
+                        />
+
+                    <PasswordBox 
+                        x:Name="pbPassword"
+                        Style="{StaticResource PasswordBoxStyle}" 
+                        FontSize="12"
+                        PasswordChanged="OnPasswordChanged"                                                                      
+                        VerticalAlignment="Center"                  
+                        />
+
+                    <Grid>
+                        <TextBlock                    
+                            Foreground="Red"
+                            Style="{StaticResource TextBlockStyle}"
+                            Text="{Binding PasswordValidationError}"                                                       
+                            />
+
+                        <TextBlock Foreground="Red" Text="{Binding ErrorText}" Style="{StaticResource TextBlockStyle}" TextWrapping="Wrap" />
+                    </Grid>
+
+                </StackPanel>                             
+
+                <StackPanel x:Name="tbCapsLockWarning" 
+                            Orientation="Horizontal" 
+                            Grid.Row="2"
+                            Visibility="{Binding Path=CapsLockWarningVisibility}">
+                    
+                    <Border Width="14" Height="14" Background="{StaticResource CapsLockIcon}"/>
+                    
+                    <TextBlock  
+                        Margin="2,0,0,0"
+                        Text="{ResX Key=Common_LoginDialog_CapsLockOn}"/>
+                    
+                </StackPanel>
+
+                <StackPanel Grid.Row="3" Orientation="Horizontal" HorizontalAlignment="Right">
+
+                    <Button                                                                   
+                        Content="{ResX Key=Common_SignIn}"                        
+                        Style="{StaticResource ButtonStyle}"                        
+                        Command="{Binding LoginCommand}"        
+                        Margin="0,5,0,0"
+                        CommandParameter="{Binding ElementName=pbPassword}"                        
+                        Width="60"                        
+                        />
+
+                </StackPanel>
+
+            </Grid>
+        </Border>
     </wpf:Activity>
 </UserControl>

@@ -26,13 +26,29 @@ namespace BitHoursApp.Wpf.Views
             InitializeComponent();
         }
 
+        public LoginViewModel ViewModel
+        {
+            get { return DataContext as LoginViewModel; }
+        }
+
         public void OnPasswordChanged(object sender, RoutedEventArgs e)
         {
-            var vm = DataContext as LoginViewModel;
             var psb = sender as PasswordBox;
 
-            if (vm != null)
-                vm.PasswordBox = psb;
+            if (ViewModel != null)
+                ViewModel.PasswordBox = psb;
+        }
+
+        private void LoginWindow_OnKeyDown(object sender, KeyEventArgs e)
+        {
+            if (ViewModel != null)
+                ViewModel.RefreshCapsLockState();
+        }
+
+        private void LoginWindow_OnLoaded(object sender, RoutedEventArgs e)
+        {
+            if (ViewModel != null)
+                ViewModel.RefreshCapsLockState();
         }
     }
 }
