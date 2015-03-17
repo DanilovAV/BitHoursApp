@@ -146,7 +146,7 @@ namespace BitHoursApp.Wpf.ViewModels
             {
                 return selectedContract != null ? selectedContract.ElapsedTime : new TimeSpan();
             }
-        }
+        }        
 
         #endregion
 
