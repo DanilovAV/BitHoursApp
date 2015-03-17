@@ -73,5 +73,13 @@ namespace BitHoursApp
         
             return notifyIcon;
         }
+
+        protected override void OnExit(ExitEventArgs e)
+        {
+            if (MainWindowWpf.Instance != null && MainWindowWpf.Instance.NotifyIcon != null)
+                MainWindowWpf.Instance.NotifyIcon.Visible = false;
+
+            base.OnExit(e);
+        }
     }
 }

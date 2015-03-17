@@ -95,5 +95,23 @@ namespace BitHoursApp.Common.Resources {
                 return ResourceManager.GetString("Common_SignIn", resourceCulture);
             }
         }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Start tracking time.
+        /// </summary>
+        internal static string Common_StartTrackingTime {
+            get {
+                return ResourceManager.GetString("Common_StartTrackingTime", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Stop tracking time.
+        /// </summary>
+        internal static string Common_StopTrackingTime {
+            get {
+                return ResourceManager.GetString("Common_StopTrackingTime", resourceCulture);
+            }
+        }
     }
 }

@@ -82,6 +82,7 @@ namespace BitHoursApp
             if (this.WindowState == WindowState.Minimized)
             {
                 this.ShowInTaskbar = false;
+                NotifyIcon.BalloonTipIcon = ToolTipIcon.Info;
                 NotifyIcon.BalloonTipTitle = "Minimize sucessful";
                 NotifyIcon.BalloonTipText = "Minimized the app ";
                 NotifyIcon.Text = "BitHours";

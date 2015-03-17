@@ -32,11 +32,9 @@ namespace BitHoursApp.Wpf.Views
         }
 
         public void OnPasswordChanged(object sender, RoutedEventArgs e)
-        {
-            var psb = sender as PasswordBox;
-
+        {      
             if (ViewModel != null)
-                ViewModel.PasswordBox = psb;
+                ViewModel.PasswordBox = pbPassword;
         }
 
         private void LoginWindow_OnKeyDown(object sender, KeyEventArgs e)
@@ -48,7 +46,10 @@ namespace BitHoursApp.Wpf.Views
         private void LoginWindow_OnLoaded(object sender, RoutedEventArgs e)
         {
             if (ViewModel != null)
+            {
                 ViewModel.RefreshCapsLockState();
+                ViewModel.PasswordBox = pbPassword;
+            }
         }
     }
 }

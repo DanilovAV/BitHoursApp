@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Reactive.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows;
@@ -65,8 +66,14 @@ namespace BitHoursApp.Wpf.ViewModels
             }
             set
             {
-                this.RaiseAndSetIfChanged(ref passwordBox, value);
-                ValidatePassword();
+                var isFirstInit = passwordBox == null;
+
+                this.RaiseAndSetIfChanged(ref passwordBox, value);                
+
+                InitializeDefaults();
+
+                if(!isFirstInit)
+                    ValidatePassword();
             }
         }
 
@@ -122,6 +129,14 @@ namespace BitHoursApp.Wpf.ViewModels
             {
                 this.RaiseAndSetIfChanged(ref errorText, value);
             }
+        }
+        
+        public bool IsValid
+        {
+            get
+            {
+                return PasswordBox != null && String.IsNullOrEmpty(EmailValidationError) && String.IsNullOrEmpty(PasswordValidationError);
+            }        
         }
 
         #endregion
@@ -186,6 +201,7 @@ namespace BitHoursApp.Wpf.ViewModels
                 ? CommonResourceManager.Instance.GetResourceString("Error_EmailBadFormat")
                 : String.Empty;
 
+            RaisePropertyChanged(() => IsValid);
         }
 
         private void ValidatePassword()
@@ -193,9 +209,11 @@ namespace BitHoursApp.Wpf.ViewModels
             PasswordValidationError = String.IsNullOrEmpty(PasswordBox.Password)
                 ? CommonResourceManager.Instance.GetResourceString("Error_PasswordEmpty")
                 : String.Empty;
+
+            RaisePropertyChanged(() => IsValid);
         }
 
-        #endregion
+        #endregion        
 
         private void ResetErrorText()
         {
@@ -209,13 +227,24 @@ namespace BitHoursApp.Wpf.ViewModels
 
         protected virtual void InitializeCommands()
         {
-            var canLogin = this.WhenAny(x => x.Email, x => x.PasswordBox, x => x.IsLogging,
-                                    (x1, x2, x3) => RegexUtils.IsValidEmail(x1.Value) && x2.Value != null &&
-                                                        !String.IsNullOrWhiteSpace(x2.Value.Password) &&
-                                                            !x3.Value);
+            var canLogin = this.WhenAny(x => x.IsValid, x => x.Value);
 
             LoginCommand = ReactiveCommand.Create(canLogin);
             LoginCommand.Subscribe(x => Login());
+        }
+
+        private bool isDefaultsInitialized = false;
+
+        protected virtual void InitializeDefaults()
+        {
+            if (isDefaultsInitialized)
+                return;
+
+            isDefaultsInitialized = true;
+
+            Email = "aleksander.v.danilov@gmail.com";
+            if (PasswordBox != null)
+                PasswordBox.Password = "ortionst";                            
         }
     }
 

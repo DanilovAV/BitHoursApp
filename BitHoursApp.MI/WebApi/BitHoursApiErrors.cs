@@ -9,6 +9,7 @@ namespace BitHoursApp.MI.WebApi
     public enum BitHoursApiErrors
     {
         None,
-        LoginError
+        LoginError,
+        GetContractsError
     }
 }

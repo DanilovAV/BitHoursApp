@@ -39,5 +39,11 @@ namespace BitHoursApp.MI.WebApi
     {
         public const string EmailParameter = "email";
         public const string PasswordParameter = "password";
+        public const string ContractorId = "contractor_id";
+        public const string ContractId = "contract_id";
+        public const string Screenshot = "screenshot";
+        public const string Minutes = "minutes";
+        public const string Memo = "memo";
+        public const string Status = "status";       
     }
 }

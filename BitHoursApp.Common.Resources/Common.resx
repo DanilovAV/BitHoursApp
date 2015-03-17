@@ -129,4 +129,10 @@
   <data name="Common_SignIn" xml:space="preserve">
     <value>Sign In</value>
   </data>
+  <data name="Common_StartTrackingTime" xml:space="preserve">
+    <value>Start tracking time</value>
+  </data>
+  <data name="Common_StopTrackingTime" xml:space="preserve">
+    <value>Stop tracking time</value>
+  </data>
 </root>
