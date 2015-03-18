@@ -15,5 +15,9 @@ namespace BitHoursApp.MI.Models
         public int ContractId { get; set; }
 
         public TimeSpan ElapsedTime { get; set; }
+
+        public int HoursPerWeek { get; set; }
+
+        public string Memo { get; set; }
     }
 }

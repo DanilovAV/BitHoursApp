@@ -42,8 +42,16 @@ namespace BitHoursApp.MI.WebApi
         public const string ContractorId = "contractor_id";
         public const string ContractId = "contract_id";
         public const string Screenshot = "screenshot";
-        public const string Minutes = "minutes";
-        public const string Memo = "memo";
-        public const string Status = "status";       
+        public const string StartTime = "start_time";
+        public const string EndTime = "end_time";
+        public const string Memo = "memo";        
+
+        public const string ScreenshotFormat = "{0}_{1}.{2}";
+        public const string ScreenshotExtension = "jpg";
+        public const string FormDataHeader = "form-data";
+        public const string JpegContentType = "image/jpeg";
+        public const string SessionParameter = "laravel_session";
+
+        public const string RequestTimeFormat = "yyyy-MM-dd HH:mm:ss";        
     }
 }

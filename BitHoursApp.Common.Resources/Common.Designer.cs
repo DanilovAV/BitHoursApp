@@ -79,6 +79,60 @@ namespace BitHoursApp.Common.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Memo:.
+        /// </summary>
+        internal static string Common_Memo {
+            get {
+                return ResourceManager.GetString("Common_Memo", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Exit.
+        /// </summary>
+        internal static string Common_Menu_Exit {
+            get {
+                return ResourceManager.GetString("Common_Menu_Exit", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to _File.
+        /// </summary>
+        internal static string Common_Menu_File {
+            get {
+                return ResourceManager.GetString("Common_Menu_File", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Logout.
+        /// </summary>
+        internal static string Common_Menu_Logout {
+            get {
+                return ResourceManager.GetString("Common_Menu_Logout", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Refresh tracking room.
+        /// </summary>
+        internal static string Common_Menu_RefreshRoom {
+            get {
+                return ResourceManager.GetString("Common_Menu_RefreshRoom", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to _View.
+        /// </summary>
+        internal static string Common_Menu_View {
+            get {
+                return ResourceManager.GetString("Common_Menu_View", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Password:.
         /// </summary>
         internal static string Common_Password {

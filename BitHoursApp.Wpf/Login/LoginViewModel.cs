@@ -175,15 +175,15 @@ namespace BitHoursApp.Wpf.ViewModels
 #endif
                 }
                 else if (response.Result != null)
-                    OnSignedIn(response.Result.data);
+                    OnSignedIn(response.Result.data, response.SessionId);
             }
 
             IsLogging = false;
         }
 
-        private void OnSignedIn(BitHoursLoginObject loginObject)
+        private void OnSignedIn(BitHoursLoginObject loginObject, string sessionId)
         {
-            var args = new SignedInEventArgs(loginObject);
+            var args = new SignedInEventArgs(loginObject, sessionId);
 
             var handler = SignedIn;
 
@@ -251,12 +251,16 @@ namespace BitHoursApp.Wpf.ViewModels
     public class SignedInEventArgs : EventArgs
     {
         private readonly BitHoursLoginObject loginObject;
+        private readonly string sessionId;
 
-        public SignedInEventArgs(BitHoursLoginObject loginObject)
+        public SignedInEventArgs(BitHoursLoginObject loginObject, string sessionId)
         {
             this.loginObject = loginObject;
+            this.sessionId = sessionId;
         }
 
         public BitHoursLoginObject LoginObject { get { return loginObject; } }
+
+        public string SessionId { get { return sessionId; } }
     }
 }

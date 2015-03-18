@@ -13,10 +13,10 @@ namespace BitHoursApp.MI.TimeTracker
 {
     public interface ITimeTrackerManager : IDisposable
     {
-        Task Start();
+        void Start();
         Task Stop();
 
-        bool IsRunning { get; }      
+        bool IsRunning { get; }
     }
 
     public class TimeTrackerManager : ITimeTrackerManager
@@ -40,27 +40,15 @@ namespace BitHoursApp.MI.TimeTracker
             dispatcherTimer.Interval = new TimeSpan(0, TimeTrackerConfiguration.IntervalMins, 0);
             dispatcherTimer.Tick += DispatcherTimerWork;
         }
-       
-        public async Task Start()
+
+        public void Start()
         {
             if (dispatcherTimer == null)
                 return;
 
             if (!dispatcherTimer.IsEnabled)
             {
-                var cancellationToken = new CancellationTokenSource();
-                cancellationToken.CancelAfter(TimeTrackerConfiguration.CancelAsyncInterval);
-
-                try
-                {
-                    await CollectTrackingDataAsync(cancellationToken.Token);
-                }
-                catch (OperationCanceledException oce)
-                {
-                    //todo: handle it
-                    System.Diagnostics.Debug.WriteLine("Collection at the start was cancelled");
-                }
-
+                lastWorkTime = DateTime.Now;
                 StartElapsedTimer();
                 dispatcherTimer.Start();
             }
@@ -85,18 +73,7 @@ namespace BitHoursApp.MI.TimeTracker
             if (dispatcherTimer.IsEnabled)
                 dispatcherTimer.Stop();
 
-            var cancellationToken = new CancellationTokenSource();
-            cancellationToken.CancelAfter(TimeTrackerConfiguration.CancelAsyncInterval);
-
-            try
-            {                
-                await CollectTrackingDataAsync(cancellationToken.Token);
-            }
-            catch (OperationCanceledException oce)
-            {
-                //todo: handle it
-                System.Diagnostics.Debug.WriteLine("Collection at the stop was cancelled");
-            }
+            await CollectTrackingData();
         }
 
         public void Dispose()
@@ -114,25 +91,39 @@ namespace BitHoursApp.MI.TimeTracker
                 snapshotManager.Dispose();
         }
 
-        private void DispatcherTimerWork(object sender, EventArgs e)
-        {
-            CollectTrackingData();
+        private DateTime lastWorkTime;
+        private Dictionary<DateTime, DateTime> intervals = new Dictionary<DateTime, DateTime>();
+
+        private async void DispatcherTimerWork(object sender, EventArgs e)
+        {          
+            await CollectTrackingData();
+            lastWorkTime = DateTime.Now;
         }
 
-        private async Task CollectTrackingDataAsync(CancellationToken cancellationToken)
-        {
-            await Task.Run(() => CollectTrackingData(cancellationToken));
-        }
+        //private async Task CollectTrackingDataAsync(CancellationToken cancellationToken = default(CancellationToken))
+        //{
+        //    await Task.Run(() => { CollectTrackingData(cancellationToken); });
+        //}
 
-        private async void CollectTrackingData(CancellationToken cancellationToken = default(CancellationToken))
+        private async Task CollectTrackingData(CancellationToken cancellationToken = default(CancellationToken))
         {
             try
             {
-                var snapshot = snapshotManager.Snapshot(ScreenshotCaptureMode.Full);
+                var snapshotData = snapshotManager.Snapshot(ScreenshotCaptureMode.Full);
+                var snapshotTime = snapshotData.Item1;
+                var snapshot = snapshotData.Item2;
 
+                if (!intervals.ContainsKey(snapshotTime))
+                    lock(intervals)
+                        if (!intervals.ContainsKey(snapshotTime))                        
+                            intervals.Add(snapshotTime, lastWorkTime);
+
+#if DEBUG
                 //for testing only
-                if (snapshot != null)                
-                    snapshot.Save(String.Format("scr_{0}.jpg", DateTime.Now.Ticks));                
+                if (snapshot != null)
+                    snapshot.Save(String.Format("scr_{0}.jpg", DateTime.Now.Ticks));
+
+#endif
 
                 //get all snapshots
                 var snapshots = snapshotManager.GetAllSnapshots();
@@ -140,29 +131,24 @@ namespace BitHoursApp.MI.TimeTracker
                 if (snapshots.Count < 1)
                     return;
 
-                //get last snapshot time
-                var lastTimeStamp = snapshots.Max(x => x.Key);
-
-                //try to resend snapshots
+                //sending snapshots
                 foreach (var snap in snapshots)
-                {
-                    var elapsedMinutes = lastTimeStamp - snap.Key;
-                    
+                {                    
                     var uploadRequest = new BitHoursUploadRequest
                     {
-                        ContractId = contractInfo.ContractId,
-                        UserId = userInfo.UserId,
+                        UserInfo = userInfo,
+                        ContractId = contractInfo.ContractId,                       
                         Snapshot = snap.Value,
-                        Status = dispatcherTimer.IsEnabled ? BitHoursUploadRequestStatus.Start : BitHoursUploadRequestStatus.Stop,
-                        ElapsedMinutes = (contractInfo.ElapsedTime - elapsedMinutes).Minutes,
-                        Memo = "test memo"
+                        StartTime = intervals.ContainsKey(snap.Key) ? intervals[snap.Key] : lastWorkTime,
+                        EndTime = snap.Key,                        
+                        Memo = contractInfo.Memo
                     };
 
                     var response = await BitHoursApi.Instance.UploadSnapshotAsync(uploadRequest, cancellationToken);
 
                     if (!response.HasError)
                         snapshotManager.RemoveSnapshot(snap.Key);
-                }                
+                }
             }
             catch
             {
@@ -176,7 +162,7 @@ namespace BitHoursApp.MI.TimeTracker
                                                             (s, e) =>
                                                             {
                                                                 contractInfo.ElapsedTime += TimeSpan.FromSeconds(1);
-                                                                
+
                                                                 if (callback != null)
                                                                     callback();
                                                             },

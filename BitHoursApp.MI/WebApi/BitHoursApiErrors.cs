@@ -10,6 +10,8 @@ namespace BitHoursApp.MI.WebApi
     {
         None,
         LoginError,
-        GetContractsError
+        GetContractsError,
+        UploadSnapshotError,
+        Timeout
     }
 }

@@ -11,11 +11,13 @@ namespace BitHoursApp.MI.Models
     public class UserInfo
     {
         private readonly BitHoursLoginObject loginObject;
+        private readonly string sessionId;
 
-        public UserInfo(BitHoursLoginObject loginObject)
+        public UserInfo(BitHoursLoginObject loginObject, string sessionId)
         {
             Check.Require(loginObject != null);
             this.loginObject = loginObject;
+            this.sessionId = sessionId;
         }
 
         public int UserId
@@ -31,6 +33,14 @@ namespace BitHoursApp.MI.Models
             get
             {
                 return loginObject.name;
+            }
+        }
+
+        public string SessionId
+        {
+            get
+            {
+                return sessionId;
             }
         }
     }

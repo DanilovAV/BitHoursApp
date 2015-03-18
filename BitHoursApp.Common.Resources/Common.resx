@@ -123,6 +123,24 @@
   <data name="Common_LoginDialog_CapsLockOn" xml:space="preserve">
     <value>CapsLock is enabled</value>
   </data>
+  <data name="Common_Memo" xml:space="preserve">
+    <value>Memo:</value>
+  </data>
+  <data name="Common_Menu_Exit" xml:space="preserve">
+    <value>Exit</value>
+  </data>
+  <data name="Common_Menu_File" xml:space="preserve">
+    <value>_File</value>
+  </data>
+  <data name="Common_Menu_Logout" xml:space="preserve">
+    <value>Logout</value>
+  </data>
+  <data name="Common_Menu_RefreshRoom" xml:space="preserve">
+    <value>Refresh tracking room</value>
+  </data>
+  <data name="Common_Menu_View" xml:space="preserve">
+    <value>_View</value>
+  </data>
   <data name="Common_Password" xml:space="preserve">
     <value>Password:</value>
   </data>

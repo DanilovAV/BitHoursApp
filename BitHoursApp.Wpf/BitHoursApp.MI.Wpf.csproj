@@ -72,8 +72,6 @@
     <Reference Include="WindowsBase" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Converters\BoolNotConverter.cs" />
-    <Compile Include="Converters\MarkupExtensionConverterBase.cs" />
     <Compile Include="Login\LoginView.xaml.cs">
       <DependentUpon>LoginView.xaml</DependentUpon>
     </Compile>

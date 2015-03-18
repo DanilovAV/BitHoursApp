@@ -3,11 +3,14 @@ using System.Collections.Generic;
 using System.Drawing.Imaging;
 using System.IO;
 using System.Linq;
+using System.Net;
 using System.Net.Http;
 using System.Net.Http.Headers;
 using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
+using BitHoursApp.Common;
+using BitHoursApp.MI.Models;
 using Newtonsoft.Json;
 
 namespace BitHoursApp.MI.WebApi
@@ -22,7 +25,7 @@ namespace BitHoursApp.MI.WebApi
         /// <summary>
         /// Get contracts
         /// </summary>       
-        Task<BitHoursApiResponse<BitHoursContractsObject>> GetContractsAsync(int contractorId);
+        Task<BitHoursApiResponse<IEnumerable<BitHoursContractsObject>>> GetContractsAsync(UserInfo userInfo);
 
         /// <summary>
         /// Upload snapshot
@@ -60,47 +63,17 @@ namespace BitHoursApp.MI.WebApi
         {
             var requestUrl = BitHoursUrlHelper.GetLoginUrl();
 
-            var postContent = new FormUrlEncodedContent(new[] 
+            var parameters = new[] 
             {
-                new KeyValuePair<string, string>(BitHoursReqParams.EmailParameter, email),
+                new KeyValuePair<string, string>(BitHoursReqParams.EmailParameter, email),            
                 new KeyValuePair<string, string>(BitHoursReqParams.PasswordParameter, password)
-            });
+            };
 
-            HttpClient httpClient = null;
-
-            var bitHoursApiResponse = new BitHoursApiResponse<BitHoursLoginObject>();
-
-            try
+            using (var postContent = new FormUrlEncodedContent(parameters))
             {
-                httpClient = new HttpClient();
-                var response = await httpClient.PostAsync(requestUrl, postContent);
-                var content = await response.Content.ReadAsStringAsync();
-                bitHoursApiResponse.Result = JsonConvert.DeserializeObject<BitHoursApiJsonResponse<BitHoursLoginObject>>(content);
-
-                //if couldn't connect 
-                if (!bitHoursApiResponse.Result.success)
-                    bitHoursApiResponse.ErrorCode = BitHoursApiErrors.LoginError;
+                var bitHoursApiResponse = await SendHttpPostRequestAsync<BitHoursLoginObject>(requestUrl, postContent, BitHoursApiErrors.LoginError);
+                return bitHoursApiResponse;
             }
-            catch (Exception ex)
-            {
-                bitHoursApiResponse.ErrorCode = BitHoursApiErrors.LoginError;
-
-#if DEBUG
-
-                bitHoursApiResponse.Error = ex.Message;
-
-#endif
-            }
-            finally
-            {
-                if (httpClient != null)
-                    httpClient.Dispose();
-
-                if (postContent != null)
-                    postContent.Dispose();
-            }
-
-            return bitHoursApiResponse;
         }
 
         /// <summary>
@@ -108,124 +81,122 @@ namespace BitHoursApp.MI.WebApi
         /// </summary>
         /// <param name="contractorId"></param>
         /// <returns></returns>
-        public async Task<BitHoursApiResponse<BitHoursContractsObject>> GetContractsAsync(int contractorId)
+        public async Task<BitHoursApiResponse<IEnumerable<BitHoursContractsObject>>> GetContractsAsync(UserInfo userInfo)
         {
+            Check.Require(userInfo != null);
+
             var requestUrl = BitHoursUrlHelper.GetContractsListUrl();
 
-            var postContent = new FormUrlEncodedContent(new[] 
+            var parameters = new[] 
             {
-                new KeyValuePair<string, string>(BitHoursReqParams.ContractorId, contractorId.ToString())
-            });
+                new KeyValuePair<string, string>(BitHoursReqParams.ContractorId, userInfo.UserId.ToString())                           
+            };
 
-            HttpClient httpClient = null;
-
-            var bitHoursApiResponse = new BitHoursApiResponse<BitHoursContractsObject>();
-
-            try
+            using (var postContent = new FormUrlEncodedContent(parameters))
             {
-                httpClient = new HttpClient();
-                var response = await httpClient.PostAsync(requestUrl, postContent);
-                var content = await response.Content.ReadAsStringAsync();
-                bitHoursApiResponse.Result = JsonConvert.DeserializeObject<BitHoursApiJsonResponse<BitHoursContractsObject>>(content);
-
-                if (!bitHoursApiResponse.Result.success)
-                    bitHoursApiResponse.ErrorCode = BitHoursApiErrors.GetContractsError;
+                var bitHoursApiResponse = await SendHttpPostRequestAsync<IEnumerable<BitHoursContractsObject>>(requestUrl, postContent, BitHoursApiErrors.GetContractsError, userInfo.SessionId);
+                return bitHoursApiResponse;
             }
-            catch (Exception ex)
-            {
-                bitHoursApiResponse.ErrorCode = BitHoursApiErrors.GetContractsError;
-
-#if DEBUG
-
-                bitHoursApiResponse.Error = ex.Message;
-
-#endif
-            }
-            finally
-            {
-                if (httpClient != null)
-                    httpClient.Dispose();
-
-                if (postContent != null)
-                    postContent.Dispose();
-            }
-
-            return bitHoursApiResponse;
         }
 
         public async Task<BitHoursApiResponse<object>> UploadSnapshotAsync(BitHoursUploadRequest uploadRequest, CancellationToken cancellationToken)
         {
+            Check.Require(uploadRequest != null);
+
             var requestUrl = BitHoursUrlHelper.GetTrackTimeUrl();
 
-            var postContent = new MultipartFormDataContent();
-
-            var values = new[]
+            using (var postContent = new MultipartFormDataContent())
             {
-                new KeyValuePair<string, string>(BitHoursReqParams.ContractorId, uploadRequest.UserId.ToString()),
-                new KeyValuePair<string, string>(BitHoursReqParams.ContractId, uploadRequest.ContractId.ToString()),
-                new KeyValuePair<string, string>(BitHoursReqParams.Minutes, uploadRequest.ElapsedMinutes.ToString()),
-                new KeyValuePair<string, string>(BitHoursReqParams.Memo, uploadRequest.Memo),
-                new KeyValuePair<string, string>(BitHoursReqParams.Status, uploadRequest.Status.ToString())                
-            };
+                var parameters = new[]
+                {
+                    new KeyValuePair<string, string>(BitHoursReqParams.ContractorId, uploadRequest.UserInfo.UserId.ToString()),
+                    new KeyValuePair<string, string>(BitHoursReqParams.ContractId, uploadRequest.ContractId.ToString()),
+                    new KeyValuePair<string, string>(BitHoursReqParams.StartTime, uploadRequest.StartTime.ToString(BitHoursReqParams.RequestTimeFormat)),
+                    new KeyValuePair<string, string>(BitHoursReqParams.EndTime, uploadRequest.EndTime.ToString(BitHoursReqParams.RequestTimeFormat)),
+                    new KeyValuePair<string, string>(BitHoursReqParams.Memo, uploadRequest.Memo)                    
+                };
 
-            foreach (var keyValuePair in values)
-            {
-                postContent.Add(new StringContent(keyValuePair.Value),
-                    String.Format("\"{0}\"", keyValuePair.Key));
+                foreach (var keyValuePair in parameters)
+                {
+                    postContent.Add(new StringContent(keyValuePair.Value),
+                        String.Format("\"{0}\"", keyValuePair.Key));
+                }
+
+                using (MemoryStream memoryStream = new MemoryStream())
+                {
+                    uploadRequest.Snapshot.Save(memoryStream, ImageFormat.Jpeg);
+
+                    var bytes = memoryStream.ToArray();
+
+                    using (var streamContent = new ByteArrayContent(bytes))
+                    {
+                        streamContent.Headers.ContentType = new MediaTypeHeaderValue(BitHoursReqParams.JpegContentType);
+                        streamContent.Headers.ContentDisposition = new ContentDispositionHeaderValue(BitHoursReqParams.FormDataHeader)
+                        {
+                            Name = BitHoursReqParams.Screenshot,
+                            FileName = String.Format(BitHoursReqParams.ScreenshotFormat, BitHoursReqParams.Screenshot, Guid.NewGuid(), BitHoursReqParams.ScreenshotExtension)
+                        };
+
+                        postContent.Add(streamContent);
+
+                        var bitHoursApiResponse = await SendHttpPostRequestAsync<object>(requestUrl, postContent, BitHoursApiErrors.UploadSnapshotError, uploadRequest.UserInfo.SessionId);
+                        return bitHoursApiResponse;
+                    }
+                }
             }
+        }
 
-            MemoryStream memoryStream = new MemoryStream();
-            uploadRequest.Snapshot.Save(memoryStream, ImageFormat.Jpeg);
-
-            var bytes = memoryStream.ToArray();
-
-            var streamContent = new ByteArrayContent(bytes);
-            streamContent.Headers.ContentType = new MediaTypeHeaderValue("image/jpeg");
-            streamContent.Headers.ContentDisposition = new ContentDispositionHeaderValue("form-data")
-            {
-                Name = BitHoursReqParams.Screenshot,
-                FileName = String.Format("{0}_{1}.jpg", BitHoursReqParams.Screenshot, Guid.NewGuid())
-            };
-
-            postContent.Add(streamContent);
-            
+        private async Task<BitHoursApiResponse<T>> SendHttpPostRequestAsync<T>(string requestUrl, HttpContent postContent, BitHoursApiErrors requestError, string sessionId = null)
+            where T : class
+        {
             HttpClient httpClient = null;
 
-            var bitHoursApiResponse = new BitHoursApiResponse<object>();
+            var bitHoursApiResponse = new BitHoursApiResponse<T>();
 
             try
             {
-                httpClient = new HttpClient();
-                var response = await httpClient.PostAsync(requestUrl, postContent, cancellationToken);
+                Uri uri = new Uri(requestUrl);
+
+                CookieContainer cookies = new CookieContainer();
+
+                if (sessionId != null)
+                    cookies.Add(uri, new Cookie(BitHoursReqParams.SessionParameter, sessionId));
+
+                HttpClientHandler handler = new HttpClientHandler();
+                handler.CookieContainer = cookies;
+
+                httpClient = new HttpClient(handler);
+
+                var response = await httpClient.PostAsync(requestUrl, postContent);
                 var content = await response.Content.ReadAsStringAsync();
-                bitHoursApiResponse.Result = JsonConvert.DeserializeObject<BitHoursApiJsonResponse<object>>(content);
+
+                IEnumerable<Cookie> responseCookies = cookies.GetCookies(uri).Cast<Cookie>();
+                var sessionCookie = responseCookies.FirstOrDefault(x => x.Name == BitHoursReqParams.SessionParameter);
+
+                if (sessionCookie != null)
+                    bitHoursApiResponse.SessionId = sessionCookie.Value;
+
+                bitHoursApiResponse.Result = JsonConvert.DeserializeObject<BitHoursApiJsonResponse<T>>(content);
 
                 if (!bitHoursApiResponse.Result.success)
-                    bitHoursApiResponse.ErrorCode = BitHoursApiErrors.GetContractsError;
+                    bitHoursApiResponse.ErrorCode = requestError;
+            }
+            catch (TaskCanceledException)
+            {
+                bitHoursApiResponse.ErrorCode = BitHoursApiErrors.Timeout;
             }
             catch (Exception ex)
             {
-                bitHoursApiResponse.ErrorCode = BitHoursApiErrors.GetContractsError;
+                bitHoursApiResponse.ErrorCode = requestError;
 
 #if DEBUG
-
                 bitHoursApiResponse.Error = ex.Message;
-
 #endif
             }
             finally
             {
                 if (httpClient != null)
                     httpClient.Dispose();
-
-                if (postContent != null)
-                    postContent.Dispose();
-
-                if (streamContent != null)
-                    streamContent.Dispose();
-
-                if (memoryStream != null)
-                    memoryStream.Dispose();
             }
 
             return bitHoursApiResponse;

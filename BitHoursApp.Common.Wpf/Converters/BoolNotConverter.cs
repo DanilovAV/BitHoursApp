@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Windows.Data;
 
-namespace BitHoursApp.MI.Wpf.Converters
+namespace BitHoursApp.Common.Wpf.Converters
 {
 	[ValueConversion(typeof(bool?), typeof(bool?))]
 	public class BoolNotConverter : MarkupExtensionConverterBase

@@ -20,7 +20,7 @@ namespace BitHoursApp.Wpf.ViewModels
     {
     }
 
-    public class TimeTrackerViewModel : ViewModelBase, ITimeTrackerViewModel
+    public class TimeTrackerViewModel : WindowViewModel, ITimeTrackerViewModel
     {
         public TimeTrackerViewModel()
         {
@@ -51,20 +51,7 @@ namespace BitHoursApp.Wpf.ViewModels
             {
                 return DateTime.Now;
             }
-        }
-
-        private bool isActive;
-        public bool IsActive
-        {
-            get
-            {
-                return isActive;
-            }
-            private set
-            {
-                this.RaiseAndSetIfChanged(ref isActive, value);
-            }
-        }
+        }       
 
         private readonly ObservableCollection<ContractInfo> contracts;
         public ObservableCollection<ContractInfo> Contracts
@@ -86,6 +73,7 @@ namespace BitHoursApp.Wpf.ViewModels
             {
                 this.RaiseAndSetIfChanged(ref selectedContract, value);
                 this.RaisePropertyChanged(() => ElapsedTime);
+                this.RaisePropertyChanged(() => Memo);                
             }
         }
 
@@ -146,7 +134,32 @@ namespace BitHoursApp.Wpf.ViewModels
             {
                 return selectedContract != null ? selectedContract.ElapsedTime : new TimeSpan();
             }
-        }        
+        }
+
+        public bool IsMemoEnabled
+        {
+            get
+            {
+                return selectedContract != null && !IsRunning && !IsStarting && !IsStopping;
+            }
+        }
+
+        public string Memo
+        {
+            get
+            {
+                return (selectedContract != null) ? selectedContract.Memo : String.Empty;
+            }
+            set
+            {
+                if (selectedContract == null || selectedContract.Memo == value)
+                    return;
+
+                selectedContract.Memo = value;
+
+                this.RaisePropertyChanged(() => Memo);
+            }
+        }
 
         #endregion
 
@@ -170,7 +183,7 @@ namespace BitHoursApp.Wpf.ViewModels
                 StartTracking();
         }
 
-        private async void StartTracking()
+        private void StartTracking()
         {
             if (selectedContract == null)
                 return;
@@ -178,13 +191,9 @@ namespace BitHoursApp.Wpf.ViewModels
             if (timeTrackerManager != null)
                 timeTrackerManager.Dispose();
 
-            timeTrackerManager = new TimeTrackerManager(userInfo, selectedContract, () => this.RaisePropertyChanged(() => ElapsedTime));
+            timeTrackerManager = new TimeTrackerManager(userInfo, selectedContract, () => this.RaisePropertyChanged(() => ElapsedTime));            
 
-            IsStarting = true;
-
-            await timeTrackerManager.Start();
-
-            IsStarting = false;
+            timeTrackerManager.Start();            
 
             IsRunning = true;
         }
@@ -207,15 +216,21 @@ namespace BitHoursApp.Wpf.ViewModels
 
         #region Infrastructure
 
-        public virtual void Configure(BitHoursLoginObject loginObject)
+        public virtual void Configure(UserInfo userInfo)
         {
-            userInfo = new UserInfo(loginObject);
+            this.userInfo = userInfo;
 
             InitializeCommands();
+            InitializeObservables();
             InitializeClockTimer();
             InitializeContracts();
         }
-
+        
+        public virtual void Refresh()
+        {
+            InitializeContracts();
+        }
+           
         private DispatcherTimer clockTimer;
 
         protected virtual void InitializeClockTimer()
@@ -228,28 +243,15 @@ namespace BitHoursApp.Wpf.ViewModels
 
         protected virtual async void InitializeContracts()
         {
-            IsActive = true;
-
-            var response = await BitHoursApi.Instance.GetContractsAsync(userInfo.UserId);
-
-            if (response != null)
+            using (var act = new ActivityScope(this))
             {
-                //temp
+                var contractsList = await GetContracts();
+
                 contracts.Clear();
-                contracts.Add(new ContractInfo { ContractTitle = "ContractTitle1", ContractOwner = "ContractOwner1" });
-                contracts.Add(new ContractInfo { ContractTitle = "ContractTitle2", ContractOwner = "ContractOwner2" });
 
-                if (response.HasError)
-                {
-                    //todo: error handling
-                }
-                else if (response.Result != null)
-                {
-
-                }
+                foreach (var contract in contractsList)
+                    contracts.Add(contract);
             }
-
-            IsActive = false;
         }
 
         protected virtual void InitializeCommands()
@@ -259,6 +261,40 @@ namespace BitHoursApp.Wpf.ViewModels
 
             TrackingCommand = ReactiveCommand.Create(canTracking);
             TrackingCommand.Subscribe(x => Tracking());
+        }
+
+        protected virtual void InitializeObservables()
+        {
+            DisposeList.Add(this.WhenAnyValue(x => x.IsRunning,
+                                                x => x.IsStopping,
+                                                x => x.IsStarting,
+                                                x => x.SelectedContract)
+                                 .Subscribe(x => this.RaisePropertyChanged(() => IsMemoEnabled)));
+        }
+
+        protected virtual async Task<List<ContractInfo>> GetContracts()
+        {
+            var contractList = new List<ContractInfo>();
+
+            var response = await BitHoursApi.Instance.GetContractsAsync(userInfo);
+
+            if (response != null)
+            {                
+                if (response.HasError)
+                {
+                    //todo: error handling
+                }
+                else if (response.Result != null)
+                {
+                    foreach (var contractObj in response.Result.data)
+                    {
+                        var contractInfo = contractObj.ToContractInfo();
+                        contractList.Add(contractInfo);
+                    }
+                }
+            }
+
+            return contractList;
         }
 
         #endregion

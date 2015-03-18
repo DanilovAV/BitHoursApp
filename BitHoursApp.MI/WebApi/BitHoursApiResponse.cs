@@ -31,6 +31,8 @@ namespace BitHoursApp.MI.WebApi
         public string Error { get; set; }
 
         public BitHoursApiJsonResponse<T> Result { get; set; }
+
+        public string SessionId { get; set; }
     }
 
     public class BitHoursApiJsonResponse<T>

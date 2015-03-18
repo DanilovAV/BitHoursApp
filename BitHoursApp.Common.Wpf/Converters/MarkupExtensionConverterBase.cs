@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Windows.Markup;
 using System.Windows.Data;
 
-namespace BitHoursApp.MI.Wpf.Converters
+namespace BitHoursApp.Common.Wpf.Converters
 {
     [MarkupExtensionReturnType(typeof(IValueConverter))]
     public abstract class MarkupExtensionConverterBase : MarkupExtension, IValueConverter
