@@ -240,11 +240,7 @@ namespace BitHoursApp.Wpf.ViewModels
             if (isDefaultsInitialized)
                 return;
 
-            isDefaultsInitialized = true;
-
-            Email = "aleksander.v.danilov@gmail.com";
-            if (PasswordBox != null)
-                PasswordBox.Password = "ortionst";                            
+            isDefaultsInitialized = true;                 
         }
     }
 
