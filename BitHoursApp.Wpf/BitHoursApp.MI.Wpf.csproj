@@ -11,6 +11,7 @@
     <AssemblyName>BitHoursApp.MI.Wpf</AssemblyName>
     <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
+    <AssemblyVersion>1.0.3.1719</AssemblyVersion>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <DebugSymbols>true</DebugSymbols>
@@ -102,7 +103,6 @@
     <ProjectReference Include="..\BitHoursApp.Controls.Wpf\BitHoursApp.Controls.Wpf.csproj">
       <Project>{7bc459c3-97d5-49cd-be91-4f317a95ac2a}</Project>
       <Name>BitHoursApp.Controls.Wpf</Name>
-      <Private>False</Private>
     </ProjectReference>
     <ProjectReference Include="..\BitHoursApp.MI\BitHoursApp.MI.csproj">
       <Project>{1c4a762f-e46f-49f5-8601-332c5c223ae4}</Project>

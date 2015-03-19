@@ -72,7 +72,7 @@ namespace BitHoursApp.Wpf.ViewModels
             set
             {
                 this.RaiseAndSetIfChanged(ref selectedContract, value);
-                this.RaisePropertyChanged(() => ElapsedTime);
+                RaiseTimesPropertyChanged();
                 this.RaisePropertyChanged(() => Memo);                
             }
         }
@@ -136,6 +136,14 @@ namespace BitHoursApp.Wpf.ViewModels
             }
         }
 
+        public TimeSpan WeeklyElapsedTime
+        {
+            get
+            {
+                return selectedContract != null ? selectedContract.WeeklyElapsedTime : new TimeSpan();
+            }
+        }
+
         public bool IsMemoEnabled
         {
             get
@@ -191,7 +199,7 @@ namespace BitHoursApp.Wpf.ViewModels
             if (timeTrackerManager != null)
                 timeTrackerManager.Dispose();
 
-            timeTrackerManager = new TimeTrackerManager(userInfo, selectedContract, () => this.RaisePropertyChanged(() => ElapsedTime));            
+            timeTrackerManager = new TimeTrackerManager(userInfo, selectedContract, RaiseTimesPropertyChanged);            
 
             timeTrackerManager.Start();            
 
@@ -295,6 +303,12 @@ namespace BitHoursApp.Wpf.ViewModels
             }
 
             return contractList;
+        }
+
+        protected virtual void RaiseTimesPropertyChanged()
+        {
+            this.RaisePropertyChanged(() => ElapsedTime);
+            this.RaisePropertyChanged(() => WeeklyElapsedTime);
         }
 
         #endregion

@@ -2,7 +2,7 @@
              xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
-             xmlns:wpf="clr-namespace:BitHoursApp.Controls.Wpf;assembly=BitHoursApp.Controls.Wpf"
+             xmlns:bh="http://www.bithours.com/winfx/2015/xaml/presentation"
              xmlns:presentationOptions="http://schemas.microsoft.com/winfx/2006/xaml/presentation/options" 
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
              KeyDown="LoginWindow_OnKeyDown"          
@@ -93,7 +93,7 @@
 
     </UserControl.Resources>
 
-    <wpf:Activity IsActive="{Binding IsLogging}" HorizontalAlignment="Stretch" VerticalAlignment="Stretch">
+    <bh:Activity IsActive="{Binding IsLogging}" HorizontalAlignment="Stretch" VerticalAlignment="Stretch">
         <Border Background="{StaticResource FormBackground}">
             <Grid HorizontalAlignment="Center" VerticalAlignment="Center">
                 <Grid.RowDefinitions>
@@ -167,7 +167,8 @@
                     <Button                                                                   
                         Content="{ResX Key=Common_SignIn}"                        
                         Style="{StaticResource ButtonStyle}"                        
-                        Command="{Binding LoginCommand}"        
+                        Command="{Binding LoginCommand}"    
+                        IsDefault="True"
                         Margin="0,5,0,0"
                         CommandParameter="{Binding ElementName=pbPassword}"                        
                         Width="60"                        
@@ -177,5 +178,5 @@
 
             </Grid>
         </Border>
-    </wpf:Activity>
+    </bh:Activity>
 </UserControl>

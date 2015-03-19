@@ -1,27 +1,42 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Configuration;
-using System.Data;
 using System.IO;
-using System.Linq;
-using System.Threading.Tasks;
+using System.Runtime.InteropServices;
+using System.Text;
 using System.Windows;
 using System.Windows.Forms;
+using System.Windows.Interop;
 using System.Windows.Media.Imaging;
+using BitHoursApp.Common;
 using BitHoursApp.Common.Resources;
+using UserSettings = BitHoursApp.Common.Resources.Properties.Settings;
 
 namespace BitHoursApp
 {
     /// <summary>
     /// Interaction logic for App.xaml
     /// </summary>
-    public partial class App : System.Windows.Application
-    {
+    public partial class App : System.Windows.Application, ISingleInstanceApp
+    {       
+        #region ISingleInstanceApp Members
+
+        public bool SignalExternalCommandLineArgs(IList<string> args)
+        {
+            if(MainWindowWpf.Instance.WindowState == WindowState.Minimized)
+                MainWindowWpf.Instance.WindowState = WindowState.Normal; 
+            else
+                MainWindowWpf.Instance.Activate();
+            
+            return true;
+        }
+
+        #endregion
+
         protected override void OnStartup(StartupEventArgs e)
         {
             AppDomain.CurrentDomain.UnhandledException += CurrentDomainUnhandledException;
-
-            InitializeApplication();         
+           
+            InitializeApplication();
             base.OnStartup(e);
         }
 
@@ -29,12 +44,14 @@ namespace BitHoursApp
         {
             try
             {
+                InitializeSettings();
+
                 ResourceRegistrator.Initialization();
 
                 Uri iconUri = GetApplicationIconUri();
 
                 MainWindowWpf.Instance.Icon = BitmapFrame.Create(iconUri);
-                MainWindowWpf.Instance.NotifyIcon = GetNotifyIcon();
+                MainWindowWpf.Instance.NotifyIcon = GetNotifyIcon();                
 
                 MainWindowWpf.Instance.Show();
                 MainWindowWpf.Instance.Activate();
@@ -42,6 +59,16 @@ namespace BitHoursApp
             catch (Exception ex)
             {
                 HandleException(ex);
+            }
+        }
+
+        private void InitializeSettings()
+        {
+            if (UserSettings.Default.UpdateSettings)
+            {
+                UserSettings.Default.Upgrade();
+                UserSettings.Default.UpdateSettings = false;
+                UserSettings.Default.Save();
             }
         }
 
@@ -70,7 +97,7 @@ namespace BitHoursApp
 
             using (Stream iconStream = System.Windows.Application.GetResourceStream(GetApplicationIconUri()).Stream)
                 notifyIcon.Icon = new System.Drawing.Icon(iconStream);
-        
+
             return notifyIcon;
         }
 

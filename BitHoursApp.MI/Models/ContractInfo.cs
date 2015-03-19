@@ -16,6 +16,14 @@ namespace BitHoursApp.MI.Models
 
         public TimeSpan ElapsedTime { get; set; }
 
+        public TimeSpan WeeklyElapsedTime
+        {
+            get
+            {
+                return ElapsedTime.Add(TimeSpan.FromHours(HoursPerWeek));
+            }
+        }
+
         public int HoursPerWeek { get; set; }
 
         public string Memo { get; set; }

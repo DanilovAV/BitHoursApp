@@ -10,6 +10,7 @@ using BitHoursApp.Common.Resources;
 using BitHoursApp.Common.Utils;
 using BitHoursApp.MI.WebApi;
 using BitHoursApp.Mvvm;
+using UserSettings = BitHoursApp.Common.Resources.Properties.Settings;
 using ReactiveUI;
 
 namespace BitHoursApp.Wpf.ViewModels
@@ -68,11 +69,11 @@ namespace BitHoursApp.Wpf.ViewModels
             {
                 var isFirstInit = passwordBox == null;
 
-                this.RaiseAndSetIfChanged(ref passwordBox, value);                
+                this.RaiseAndSetIfChanged(ref passwordBox, value);
 
                 InitializeDefaults();
 
-                if(!isFirstInit)
+                if (!isFirstInit)
                     ValidatePassword();
             }
         }
@@ -130,13 +131,13 @@ namespace BitHoursApp.Wpf.ViewModels
                 this.RaiseAndSetIfChanged(ref errorText, value);
             }
         }
-        
+
         public bool IsValid
         {
             get
             {
                 return PasswordBox != null && String.IsNullOrEmpty(EmailValidationError) && String.IsNullOrEmpty(PasswordValidationError);
-            }        
+            }
         }
 
         #endregion
@@ -174,7 +175,7 @@ namespace BitHoursApp.Wpf.ViewModels
 
 #endif
                 }
-                else if (response.Result != null)
+                else if (response.Result != null && response.Result.success)
                     OnSignedIn(response.Result.data, response.SessionId);
             }
 
@@ -183,6 +184,9 @@ namespace BitHoursApp.Wpf.ViewModels
 
         private void OnSignedIn(BitHoursLoginObject loginObject, string sessionId)
         {
+            UserSettings.Default.DefaultEmail = Email;
+            UserSettings.Default.Save();
+
             var args = new SignedInEventArgs(loginObject, sessionId);
 
             var handler = SignedIn;
@@ -213,7 +217,7 @@ namespace BitHoursApp.Wpf.ViewModels
             RaisePropertyChanged(() => IsValid);
         }
 
-        #endregion        
+        #endregion
 
         private void ResetErrorText()
         {
@@ -240,7 +244,10 @@ namespace BitHoursApp.Wpf.ViewModels
             if (isDefaultsInitialized)
                 return;
 
-            isDefaultsInitialized = true;                 
+            isDefaultsInitialized = true;
+
+            if (RegexUtils.IsValidEmail(UserSettings.Default.DefaultEmail))
+                Email = UserSettings.Default.DefaultEmail;
         }
     }
 

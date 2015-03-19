@@ -17,7 +17,7 @@ namespace BitHoursApp.Wpf
     public class MainViewModel : ViewModelBase
     {
         public MainViewModel()
-        {
+        {            
             Initialize();
         }
 
@@ -46,6 +46,21 @@ namespace BitHoursApp.Wpf
             private set
             {
                 this.RaiseAndSetIfChanged(ref isLoggedIn, value);
+            }
+        }
+
+        public bool AskExitConfirmation
+        {
+            get
+            {
+                var timeTrackerViewModel = WorkArea as TimeTrackerViewModel;
+
+                if (timeTrackerViewModel != null)
+                {
+                    return timeTrackerViewModel.IsRunning || timeTrackerViewModel.IsStarting || timeTrackerViewModel.IsStopping;
+                }
+
+                return false;
             }
         }
 

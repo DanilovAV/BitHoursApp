@@ -9,10 +9,13 @@ using System.Windows.Data;
 using System.Windows.Documents;
 using System.Windows.Forms;
 using System.Windows.Input;
+using System.Windows.Interop;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
+using BitHoursApp.Common;
+using BitHoursApp.Common.Resources;
 using BitHoursApp.Wpf;
 using BitHoursApp.Wpf.ViewModels;
 
@@ -29,10 +32,11 @@ namespace BitHoursApp
         }
 
         private MainWindowWpf(MainViewModel vm)
-        {
+        {            
             DataContext = vm;
             this.StateChanged += OnStateChanged;
-            InitializeComponent();
+           
+            InitializeComponent();        
         }
 
         private static MainWindowWpf instance;
@@ -94,6 +98,19 @@ namespace BitHoursApp
                 NotifyIcon.Visible = false;
                 this.ShowInTaskbar = true;
             }
+        }
+
+        protected override void OnClosing(System.ComponentModel.CancelEventArgs e)
+        {
+            var mainViewModel = DataContext as MainViewModel;
+
+            if (mainViewModel != null && mainViewModel.AskExitConfirmation && System.Windows.MessageBox.Show(CommonResourceManager.Instance.GetResourceString("Common_ExitDialog"),
+                CommonResourceManager.Instance.GetResourceString("Common_ExitDialogCaption"), MessageBoxButton.YesNo, MessageBoxImage.Question) == MessageBoxResult.No)
+            {
+                e.Cancel = true;
+            }
+
+            base.OnClosing(e);
         }
     }
 }

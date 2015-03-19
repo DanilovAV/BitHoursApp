@@ -120,6 +120,15 @@
   <data name="Common_Email" xml:space="preserve">
     <value>Email:</value>
   </data>
+  <data name="Common_ExitDialog" xml:space="preserve">
+    <value>Confirm exit?</value>
+  </data>
+  <data name="Common_ExitDialogCaption" xml:space="preserve">
+    <value>Exit</value>
+  </data>
+  <data name="Common_HoursAbbreviation" xml:space="preserve">
+    <value>h</value>
+  </data>
   <data name="Common_LoginDialog_CapsLockOn" xml:space="preserve">
     <value>CapsLock is enabled</value>
   </data>
@@ -141,8 +150,14 @@
   <data name="Common_Menu_View" xml:space="preserve">
     <value>_View</value>
   </data>
+  <data name="Common_MinutesAbbreviation" xml:space="preserve">
+    <value>m</value>
+  </data>
   <data name="Common_Password" xml:space="preserve">
     <value>Password:</value>
+  </data>
+  <data name="Common_SecondsAbbreviation" xml:space="preserve">
+    <value>s</value>
   </data>
   <data name="Common_SignIn" xml:space="preserve">
     <value>Sign In</value>
@@ -152,5 +167,11 @@
   </data>
   <data name="Common_StopTrackingTime" xml:space="preserve">
     <value>Stop tracking time</value>
+  </data>
+  <data name="Common_TimeTrackingView_Current" xml:space="preserve">
+    <value>Current</value>
+  </data>
+  <data name="Common_TimeTrackingView_Weekly" xml:space="preserve">
+    <value>Week</value>
   </data>
 </root>

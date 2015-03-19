@@ -70,6 +70,33 @@ namespace BitHoursApp.Common.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Confirm exit?.
+        /// </summary>
+        internal static string Common_ExitDialog {
+            get {
+                return ResourceManager.GetString("Common_ExitDialog", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Exit.
+        /// </summary>
+        internal static string Common_ExitDialogCaption {
+            get {
+                return ResourceManager.GetString("Common_ExitDialogCaption", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to h.
+        /// </summary>
+        internal static string Common_HoursAbbreviation {
+            get {
+                return ResourceManager.GetString("Common_HoursAbbreviation", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to CapsLock is enabled.
         /// </summary>
         internal static string Common_LoginDialog_CapsLockOn {
@@ -133,11 +160,29 @@ namespace BitHoursApp.Common.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to m.
+        /// </summary>
+        internal static string Common_MinutesAbbreviation {
+            get {
+                return ResourceManager.GetString("Common_MinutesAbbreviation", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Password:.
         /// </summary>
         internal static string Common_Password {
             get {
                 return ResourceManager.GetString("Common_Password", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to s.
+        /// </summary>
+        internal static string Common_SecondsAbbreviation {
+            get {
+                return ResourceManager.GetString("Common_SecondsAbbreviation", resourceCulture);
             }
         }
         
@@ -165,6 +210,24 @@ namespace BitHoursApp.Common.Resources {
         internal static string Common_StopTrackingTime {
             get {
                 return ResourceManager.GetString("Common_StopTrackingTime", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Current.
+        /// </summary>
+        internal static string Common_TimeTrackingView_Current {
+            get {
+                return ResourceManager.GetString("Common_TimeTrackingView_Current", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Week.
+        /// </summary>
+        internal static string Common_TimeTrackingView_Weekly {
+            get {
+                return ResourceManager.GetString("Common_TimeTrackingView_Weekly", resourceCulture);
             }
         }
     }
