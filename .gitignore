@@ -230,3 +230,7 @@ $RECYCLE.BIN/
 
 # Windows shortcuts
 *.lnk
+
+# Custom
+[Ss]ertificates/
+[Tt]ools/

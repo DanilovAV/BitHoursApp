@@ -37,9 +37,11 @@ namespace BitHoursApp.MI.TimeTracker
             snapshotManager = new SnapshotsManager();
 
             dispatcherTimer = new DispatcherTimer(DispatcherPriority.Normal, Dispatcher.CurrentDispatcher);
-            dispatcherTimer.Interval = new TimeSpan(0, TimeTrackerConfiguration.IntervalMins, 0);
+            dispatcherTimer.Interval = new TimeSpan(0, TimeTrackerConfiguration.IntervalMin, TimeTrackerConfiguration.IntervalSec);
             dispatcherTimer.Tick += DispatcherTimerWork;
         }
+
+        private bool justStarted = false;
 
         public void Start()
         {
@@ -49,6 +51,7 @@ namespace BitHoursApp.MI.TimeTracker
             if (!dispatcherTimer.IsEnabled)
             {
                 lastWorkTime = DateTime.Now;
+                justStarted = true;
                 StartElapsedTimer();
                 dispatcherTimer.Start();
             }
@@ -95,27 +98,30 @@ namespace BitHoursApp.MI.TimeTracker
         private Dictionary<DateTime, DateTime> intervals = new Dictionary<DateTime, DateTime>();
 
         private async void DispatcherTimerWork(object sender, EventArgs e)
-        {          
-            await CollectTrackingData();
-            lastWorkTime = DateTime.Now;
+        {
+            var time = DateTime.Now;
+
+            if (((time.Minute % 10) != TimeTrackerConfiguration.EveryMin) || (time.Second != TimeTrackerConfiguration.EverySec))
+                return;
+
+            await CollectTrackingData(time);
+            lastWorkTime = time;
+
+            if (justStarted)
+                justStarted = false;
         }
 
-        //private async Task CollectTrackingDataAsync(CancellationToken cancellationToken = default(CancellationToken))
-        //{
-        //    await Task.Run(() => { CollectTrackingData(cancellationToken); });
-        //}
-
-        private async Task CollectTrackingData(CancellationToken cancellationToken = default(CancellationToken))
+        private async Task CollectTrackingData(DateTime? time = null, CancellationToken cancellationToken = default(CancellationToken))
         {
             try
             {
-                var snapshotData = snapshotManager.Snapshot(ScreenshotCaptureMode.Full);
+                var snapshotData = snapshotManager.Snapshot(ScreenshotCaptureMode.Full, time);
                 var snapshotTime = snapshotData.Item1;
                 var snapshot = snapshotData.Item2;
 
                 if (!intervals.ContainsKey(snapshotTime))
-                    lock(intervals)
-                        if (!intervals.ContainsKey(snapshotTime))                        
+                    lock (intervals)
+                        if (!intervals.ContainsKey(snapshotTime))
                             intervals.Add(snapshotTime, lastWorkTime);
 
 #if DEBUG
@@ -133,14 +139,19 @@ namespace BitHoursApp.MI.TimeTracker
 
                 //sending snapshots
                 foreach (var snap in snapshots)
-                {                    
+                {
+                    var startTime = intervals.ContainsKey(snap.Key) ? intervals[snap.Key] : lastWorkTime;
+
+                    if (!justStarted)                    
+                        startTime = startTime.AddMinutes(1);                                        
+
                     var uploadRequest = new BitHoursUploadRequest
                     {
                         UserInfo = userInfo,
-                        ContractId = contractInfo.ContractId,                       
+                        ContractId = contractInfo.ContractId,
                         Snapshot = snap.Value,
-                        StartTime = intervals.ContainsKey(snap.Key) ? intervals[snap.Key] : lastWorkTime,
-                        EndTime = snap.Key,                        
+                        StartTime = startTime,
+                        EndTime = snap.Key,
                         Memo = contractInfo.Memo
                     };
 

@@ -8,7 +8,9 @@ namespace BitHoursApp.MI.TimeTracker
 {
     public static class TimeTrackerConfiguration
     {
-        public const int IntervalMins = 1;
-        public const int CancelAsyncInterval = 2000;
+        public const int IntervalMin = 0;
+        public const int IntervalSec = 1;
+        public const int EveryMin = 9;
+        public const int EverySec = 0;
     }
 }

@@ -174,4 +174,10 @@
   <data name="Common_TimeTrackingView_Weekly" xml:space="preserve">
     <value>Week</value>
   </data>
+  <data name="Common_UpdateCaption" xml:space="preserve">
+    <value>BitHours Updater</value>
+  </data>
+  <data name="Common_UpdateQuestion" xml:space="preserve">
+    <value>Update is available. Do you want to download it?</value>
+  </data>
 </root>

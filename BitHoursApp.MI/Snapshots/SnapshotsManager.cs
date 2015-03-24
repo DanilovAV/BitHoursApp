@@ -9,7 +9,7 @@ namespace BitHoursApp.MI.Snapshots
 {
     public interface ISnapshotsManager : IDisposable
     {
-        Tuple<DateTime, Image> Snapshot(ScreenshotCaptureMode snapshotMode);
+        Tuple<DateTime, Image> Snapshot(ScreenshotCaptureMode snapshotMode, DateTime? time = null);
 
         void RemoveSnapshot(DateTime time);
 
@@ -28,18 +28,18 @@ namespace BitHoursApp.MI.Snapshots
         {
         }
 
-        public Tuple<DateTime, Image> Snapshot(ScreenshotCaptureMode snapshotMode)
+        public Tuple<DateTime, Image> Snapshot(ScreenshotCaptureMode snapshotMode, DateTime? time = null)
         {
             try
             {
                 var snapshot = ScreenshotCapture.TakeScreenshot(snapshotMode);
-                var time = DateTime.Now;
+                time = time ?? DateTime.Now;
 
                 if (snapshot != null)
                     lock (snapshots)
-                        snapshots.Add(DateTime.Now, snapshot);
+                        snapshots.Add(time.Value, snapshot);
 
-                return new Tuple<DateTime, Image>(time, snapshot);
+                return new Tuple<DateTime, Image>(time.Value, snapshot);
             }
             catch
             {

@@ -16,7 +16,7 @@
     <ReferencePath>$(ProgramFiles)\Common Files\microsoft shared\VSTT\$(VisualStudioVersion)\UITestExtensionPackages</ReferencePath>
     <IsCodedUITest>False</IsCodedUITest>
     <TestProjectType>UnitTest</TestProjectType>
-    <AssemblyVersion>1.0.3.1712</AssemblyVersion>
+    <AssemblyVersion>1.0.3.1808</AssemblyVersion>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <DebugSymbols>true</DebugSymbols>
@@ -35,11 +35,18 @@
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
+  <PropertyGroup>
+    <SignAssembly>true</SignAssembly>
+  </PropertyGroup>
+  <PropertyGroup>
+    <AssemblyOriginatorKeyFile>..\Sertificates\keyfile.pfx</AssemblyOriginatorKeyFile>
+  </PropertyGroup>
   <ItemGroup>
     <Reference Include="Newtonsoft.Json">
-      <HintPath>..\packages\Newtonsoft.Json.6.0.8\lib\net45\Newtonsoft.Json.dll</HintPath>
+      <HintPath>..\References\Newtonsoft.Json.dll</HintPath>
     </Reference>
     <Reference Include="System" />
+    <Reference Include="System.XML" />
   </ItemGroup>
   <Choose>
     <When Condition="('$(VisualStudioVersion)' == '10.0' or '$(VisualStudioVersion)' == '') and '$(TargetFrameworkVersion)' == 'v3.5'">
@@ -54,6 +61,8 @@
     </Otherwise>
   </Choose>
   <ItemGroup>
+    <Compile Include="ApplicationInfoLoaderTest.cs" />
+    <Compile Include="AppUpdaterTest.cs" />
     <Compile Include="WebApiTest.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
@@ -70,6 +79,10 @@
       <Project>{7447aa30-0a7e-4a13-b50e-8785fb2b4379}</Project>
       <Name>BitHoursApp.Mvvm</Name>
     </ProjectReference>
+    <ProjectReference Include="..\BitHoursApp.Updater.Core\BitHoursApp.Updater.Core.csproj">
+      <Project>{3d9ada75-8138-460a-b150-1fd6fad0769c}</Project>
+      <Name>BitHoursApp.Updater.Core</Name>
+    </ProjectReference>
     <ProjectReference Include="..\BitHoursApp.Wpf\BitHoursApp.MI.Wpf.csproj">
       <Project>{ff3674ef-837a-4ace-8601-a5f1bacc25f9}</Project>
       <Name>BitHoursApp.MI.Wpf</Name>
@@ -77,6 +90,11 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="ApplicationInfo.xml">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
   </ItemGroup>
   <Choose>
     <When Condition="'$(VisualStudioVersion)' == '10.0' And '$(IsCodedUITest)' == 'True'">

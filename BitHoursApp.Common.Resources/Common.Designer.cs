@@ -230,5 +230,23 @@ namespace BitHoursApp.Common.Resources {
                 return ResourceManager.GetString("Common_TimeTrackingView_Weekly", resourceCulture);
             }
         }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to BitHours Updater.
+        /// </summary>
+        internal static string Common_UpdateCaption {
+            get {
+                return ResourceManager.GetString("Common_UpdateCaption", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Update is available. Do you want to download it?.
+        /// </summary>
+        internal static string Common_UpdateQuestion {
+            get {
+                return ResourceManager.GetString("Common_UpdateQuestion", resourceCulture);
+            }
+        }
     }
 }

@@ -111,8 +111,8 @@ namespace BitHoursApp.MI.WebApi
                 {
                     new KeyValuePair<string, string>(BitHoursReqParams.ContractorId, uploadRequest.UserInfo.UserId.ToString()),
                     new KeyValuePair<string, string>(BitHoursReqParams.ContractId, uploadRequest.ContractId.ToString()),
-                    new KeyValuePair<string, string>(BitHoursReqParams.StartTime, uploadRequest.StartTime.ToString(BitHoursReqParams.RequestTimeFormat)),
-                    new KeyValuePair<string, string>(BitHoursReqParams.EndTime, uploadRequest.EndTime.ToString(BitHoursReqParams.RequestTimeFormat)),
+                    new KeyValuePair<string, string>(BitHoursReqParams.StartTime, uploadRequest.StartTime.ToUniversalTime().ToString(BitHoursReqParams.RequestTimeFormat)),
+                    new KeyValuePair<string, string>(BitHoursReqParams.EndTime, uploadRequest.EndTime.ToUniversalTime().ToString(BitHoursReqParams.RequestTimeFormat)),
                     new KeyValuePair<string, string>(BitHoursReqParams.Memo, uploadRequest.Memo != null ? uploadRequest.Memo : String.Empty)                    
                 };
 

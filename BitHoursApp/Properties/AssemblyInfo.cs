@@ -15,7 +15,7 @@ using System.Windows;
 [assembly: AssemblyCopyright("Copyright © BitHours 2015")]
 [assembly: AssemblyTrademark("")]
 [assembly: AssemblyCulture("")]
-[assembly: Guid("CF7D8464-931D-4D77-A127-4CEB1FA236B4")]
+[assembly: Guid("cf7d8464-931d-4d77-a127-4ceb1fa236b4")]
 
 // Setting ComVisible to false makes the types in this assembly not visible 
 // to COM components.  If you need to access a type in this assembly from 
@@ -52,5 +52,5 @@ using System.Windows;
 // You can specify all the values or you can default the Build and Revision Numbers 
 // by using the '*' as shown below:
 // [assembly: AssemblyVersion("1.0.*")]
-[assembly: AssemblyVersion("1.0.3.1719")]
-[assembly: AssemblyFileVersion("1.0.3.1719")]
+[assembly: AssemblyVersion("1.0.3.1855")]
+[assembly: AssemblyFileVersion("1.0.3.1855")]

@@ -22,16 +22,12 @@ EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BitHoursApp.Common.Wpf", "BitHoursApp.Common.Wpf\BitHoursApp.Common.Wpf.csproj", "{D535E81F-2DF7-4ED4-89DE-E1A0BBAF93C4}"
 EndProject
 Project("{6141683F-8A12-4E36-9623-2EB02B2C2303}") = "BitHoursAppSetup", "BitHoursAppSetup\BitHoursAppSetup.isproj", "{3EE209E0-C8D1-472C-A777-098029E4F7FA}"
-	ProjectSection(ProjectDependencies) = postProject
-		{9C960B52-559A-4A88-BF57-DB79D9881BFF} = {9C960B52-559A-4A88-BF57-DB79D9881BFF}
-	EndProjectSection
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BitHoursApp.Updater", "BitHoursApp.Updater\BitHoursApp.Updater.csproj", "{FC6DFBC0-B19B-40D5-8CCA-D9349D9F2C5E}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BitHoursApp.Updater.Core", "BitHoursApp.Updater.Core\BitHoursApp.Updater.Core.csproj", "{3D9ADA75-8138-460A-B150-1FD6FAD0769C}"
 EndProject
 Global
-	GlobalSection(AutomaticVersions) = postSolution
-		UpdateAssemblyVersion = False
-		UpdateAssemblyFileVersion = False
-		UpdateAssemblyInfoVersion = False
-	EndGlobalSection
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		CD_ROM|Any CPU = CD_ROM|Any CPU
 		Debug|Any CPU = Debug|Any CPU
@@ -150,6 +146,26 @@ Global
 		{3EE209E0-C8D1-472C-A777-098029E4F7FA}.Release|Any CPU.Build.0 = SingleImage
 		{3EE209E0-C8D1-472C-A777-098029E4F7FA}.SingleImage|Any CPU.ActiveCfg = SingleImage
 		{3EE209E0-C8D1-472C-A777-098029E4F7FA}.SingleImage|Any CPU.Build.0 = SingleImage
+		{FC6DFBC0-B19B-40D5-8CCA-D9349D9F2C5E}.CD_ROM|Any CPU.ActiveCfg = Release|Any CPU
+		{FC6DFBC0-B19B-40D5-8CCA-D9349D9F2C5E}.CD_ROM|Any CPU.Build.0 = Release|Any CPU
+		{FC6DFBC0-B19B-40D5-8CCA-D9349D9F2C5E}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{FC6DFBC0-B19B-40D5-8CCA-D9349D9F2C5E}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{FC6DFBC0-B19B-40D5-8CCA-D9349D9F2C5E}.DVD-5|Any CPU.ActiveCfg = Debug|Any CPU
+		{FC6DFBC0-B19B-40D5-8CCA-D9349D9F2C5E}.DVD-5|Any CPU.Build.0 = Debug|Any CPU
+		{FC6DFBC0-B19B-40D5-8CCA-D9349D9F2C5E}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{FC6DFBC0-B19B-40D5-8CCA-D9349D9F2C5E}.Release|Any CPU.Build.0 = Release|Any CPU
+		{FC6DFBC0-B19B-40D5-8CCA-D9349D9F2C5E}.SingleImage|Any CPU.ActiveCfg = Release|Any CPU
+		{FC6DFBC0-B19B-40D5-8CCA-D9349D9F2C5E}.SingleImage|Any CPU.Build.0 = Release|Any CPU
+		{3D9ADA75-8138-460A-B150-1FD6FAD0769C}.CD_ROM|Any CPU.ActiveCfg = Release|Any CPU
+		{3D9ADA75-8138-460A-B150-1FD6FAD0769C}.CD_ROM|Any CPU.Build.0 = Release|Any CPU
+		{3D9ADA75-8138-460A-B150-1FD6FAD0769C}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{3D9ADA75-8138-460A-B150-1FD6FAD0769C}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{3D9ADA75-8138-460A-B150-1FD6FAD0769C}.DVD-5|Any CPU.ActiveCfg = Debug|Any CPU
+		{3D9ADA75-8138-460A-B150-1FD6FAD0769C}.DVD-5|Any CPU.Build.0 = Debug|Any CPU
+		{3D9ADA75-8138-460A-B150-1FD6FAD0769C}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{3D9ADA75-8138-460A-B150-1FD6FAD0769C}.Release|Any CPU.Build.0 = Release|Any CPU
+		{3D9ADA75-8138-460A-B150-1FD6FAD0769C}.SingleImage|Any CPU.ActiveCfg = Release|Any CPU
+		{3D9ADA75-8138-460A-B150-1FD6FAD0769C}.SingleImage|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
