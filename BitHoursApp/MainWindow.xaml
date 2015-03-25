@@ -4,12 +4,16 @@
         xmlns:dxb="http://schemas.devexpress.com/winfx/2008/xaml/bars" x:Class="BitHoursApp.MainWindowWpf"
         xmlns:vw="clr-namespace:BitHoursApp.Wpf.Views;assembly=BitHoursApp.MI.Wpf"
         xmlns:vm="clr-namespace:BitHoursApp.Wpf.ViewModels;assembly=BitHoursApp.MI.Wpf"
-        xmlns:bh="http://www.bithours.com/winfx/2015/xaml/presentation"
-        Title="BitHours"        
+        xmlns:bh="http://www.bithours.com/winfx/2015/xaml/presentation"       
         MinHeight="600" 
         Height="600"
         MinWidth="800"
         Width="800">
+    <Window.Title>
+        <ResX Key="Common_Title">
+            <ResXParam Path="Version" />
+        </ResX>
+    </Window.Title>
     <Window.Resources>
 
         <DataTemplate DataType="{x:Type vm:LoginViewModel}">
@@ -26,18 +30,18 @@
             <RowDefinition Height="Auto" />
             <RowDefinition Height="*" />
         </Grid.RowDefinitions>
-  
+
         <Menu Grid.Row="0">
             <MenuItem Header="{ResX Key=Common_Menu_File}">
                 <MenuItem Header="{ResX Key=Common_Menu_Logout}" Command="{Binding LogoutCommand}" Visibility="{Binding IsLoggedIn, Converter={bh:BoolToVisibilityConverter}}" />
                 <MenuItem Header="{ResX Key=Common_Menu_Exit}" Command="{Binding CloseCommand}" />
             </MenuItem>
             <MenuItem Header="{ResX Key=Common_Menu_View}">
-                <MenuItem Header="{ResX Key=Common_Menu_RefreshRoom}" Command="{Binding RefreshRoomCommand}" />                
+                <MenuItem Header="{ResX Key=Common_Menu_RefreshRoom}" Command="{Binding RefreshRoomCommand}" />
             </MenuItem>
         </Menu>
-        
+
         <ContentControl Grid.Row="1" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Content="{Binding WorkArea}" />
-        
+
     </Grid>
 </Window>

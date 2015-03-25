@@ -11,13 +11,14 @@ using BitHoursApp.Common.Reflection;
 using BitHoursApp.MI.Models;
 using System.Reactive.Linq;
 using System.Diagnostics;
+using System.Reflection;
 
 namespace BitHoursApp.Wpf
 {
     public class MainViewModel : ViewModelBase
     {
         public MainViewModel()
-        {            
+        {
             Initialize();
         }
 
@@ -61,6 +62,18 @@ namespace BitHoursApp.Wpf
                 }
 
                 return false;
+            }
+        }
+
+        private string version;
+        public string Version
+        {
+            get
+            {
+                if (version == null)
+                    version = Assembly.GetEntryAssembly().GetName().Version.ToString();
+
+                return version;
             }
         }
 
@@ -147,7 +160,7 @@ namespace BitHoursApp.Wpf
         protected virtual void Logout()
         {
             if (WorkArea != null)
-                WorkArea.Dispose();            
+                WorkArea.Dispose();
 
             IsLoggedIn = false;
 
