@@ -8,7 +8,7 @@ namespace BitHoursApp.Updater.Core
 {
     public static class UpdaterPaths
     {
-        public const string updaterBasePath = "http://bithours.com/development/dev/updater/";
+        public const string updaterBasePath = "https://bithours.com/development/dev/updater/";
         public const string updaterDataPath = "updater.xml";
 
         public static string GetUpdaterDataPath()

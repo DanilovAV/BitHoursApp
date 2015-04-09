@@ -160,7 +160,7 @@
     <value>Unpacking failed.</value>
   </data>
   <data name="Error_VerifyingFailed" xml:space="preserve">
-    <value>Verifying failed. Sertificate is invalid.</value>
+    <value>Verifying failed. Certificate is invalid.</value>
   </data>
   <data name="Message_Operation_Completed" xml:space="preserve">
     <value>Completed.</value>

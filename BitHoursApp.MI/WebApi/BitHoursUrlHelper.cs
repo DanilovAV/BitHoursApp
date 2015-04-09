@@ -8,7 +8,7 @@ namespace BitHoursApp.MI.WebApi
 {
     public static class BitHoursUrlHelper
     {
-        public const string BaseServiceUrl = "http://bithours.com/development/dev/webservice/";
+        public const string BaseServiceUrl = "https://bithours.com/development/dev/webservice/";
 
         public const string LoginPoint = "login";
         public const string ContractsListPoint = "list-contracts";

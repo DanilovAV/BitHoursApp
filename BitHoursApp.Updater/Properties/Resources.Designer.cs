@@ -187,7 +187,7 @@ namespace BitHoursApp.Updater.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Verifying failed. Sertificate is invalid..
+        ///   Looks up a localized string similar to Verifying failed. Certificate is invalid..
         /// </summary>
         internal static string Error_VerifyingFailed {
             get {
